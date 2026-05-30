@@ -27,27 +27,35 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Install uv
         uses: astral-sh/setup-uv@v3
         with:
           version: "latest"
+
       - name: Set up Python
         run: uv python install 3.12
+        working-directory: novafit
+
       - name: Install dependencies
         run: uv sync
+        working-directory: novafit
+
       - name: Run tests
+        working-directory: novafit
         env:
-          SECRET_KEY:    test-secret-key-for-ci-only
-          DEBUG:         True
-          ALLOWED_HOSTS: localhost,127.0.0.1
-          DB_NAME:       novafit_test_db
-          DB_USER:       novafit_user
-          DB_PASSWORD:   novafit_pass_123
-          DB_HOST:       localhost
-          DB_PORT:       5432
-          TEST_DB_NAME:  novafit_test_db
+          SECRET_KEY:             test-secret-key-for-ci-only
+          DEBUG:                  True
+          ALLOWED_HOSTS:          localhost,127.0.0.1
+          DB_NAME:                novafit_test_db
+          DB_USER:                novafit_user
+          DB_PASSWORD:            novafit_pass_123
+          DB_HOST:                localhost
+          DB_PORT:                5432
+          TEST_DB_NAME:           novafit_test_db
           CORS_ALLOW_ALL_ORIGINS: True
         run: uv run python manage.py test novafit --verbosity=2
+
   # ── Job 2: Deploy ─────────────────────────────────────────
   deploy:
     name: Deploy to Azure VM
