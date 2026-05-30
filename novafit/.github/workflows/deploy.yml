@@ -55,7 +55,7 @@ jobs:
           DB_PORT:                5432
           TEST_DB_NAME:           novafit_test_db
           CORS_ALLOW_ALL_ORIGINS: True
-        run: uv run python manage.py test novafit --verbosity=2
+        run: uv run python manage.py test novafit --verbosity=2 --keepdb
 
   # ── Job 2: Deploy ─────────────────────────────────────────
   deploy:

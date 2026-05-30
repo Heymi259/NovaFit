@@ -1,35 +1,24 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 
-class EsAdmin(BasePermission):
-    """Solo administradores pueden acceder."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.rol == 'admin'
+class NovafitPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+    def get_paginated_response(self, data):
+        return Response({
+            'total': self.page.paginator.count,
+            'paginas': self.page.paginator.num_pages,
+            'pagina_actual': self.page.number,
+            'siguiente': self.get_next_link(),
+            'anterior': self.get_previous_link(),
+            'resultados': data
+        })
 
 
-class EsEntrenador(BasePermission):
-    """Solo entrenadores pueden acceder."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.rol == 'entrenador'
-
-
-class EsMiembro(BasePermission):
-    """Solo miembros pueden acceder."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.rol == 'miembro'
-
-
-class EsAdminOEntrenador(BasePermission):
-    """Administradores o entrenadores pueden acceder."""
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.rol in ['admin', 'entrenador']
-
-
-class EsAdminOLectura(BasePermission):
-    """Admin puede todo, otros solo lectura."""
-    def has_permission(self, request, view):
-        if not request.user.is_authenticated:
-            return False
-        if request.method in ['GET', 'HEAD', 'OPTIONS']:
-            return True
-        return request.user.rol == 'admin'
+class PaginacionGrande(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 200
