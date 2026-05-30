@@ -15,8 +15,8 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_DB:       novafit_test_db
-          POSTGRES_USER:     novafit_user
-          POSTGRES_PASSWORD: novafit_pass_123
+          POSTGRES_USER:     novafituser
+          POSTGRES_PASSWORD: novafitpass
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -44,12 +44,13 @@ jobs:
       - name: Run tests
         working-directory: novafit
         env:
+          DJANGO_SETTINGS_MODULE: config.settings
           SECRET_KEY:             test-secret-key-for-ci-only
           DEBUG:                  True
           ALLOWED_HOSTS:          localhost,127.0.0.1
           DB_NAME:                novafit_test_db
-          DB_USER:                novafit_user
-          DB_PASSWORD:            novafit_pass_123
+          DB_USER:                novafituser
+          DB_PASSWORD:            novafitpass
           DB_HOST:                localhost
           DB_PORT:                5432
           TEST_DB_NAME:           novafit_test_db
@@ -73,7 +74,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
       - name: Deploy to VM
         run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} << ENDSSH
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} << 'ENDSSH'
             set -e
             echo "── 1. Actualizando código ──"
             cd /opt/Novafit/novafit
