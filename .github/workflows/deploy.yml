@@ -73,7 +73,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
       - name: Deploy to VM
         run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} << 'ENDSSH'
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} << ENDSSH
             set -e
             echo "── 1. Actualizando código ──"
             cd /opt/Novafit/novafit
