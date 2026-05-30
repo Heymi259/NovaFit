@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from ..models.miembro import Usuario, Miembro
-from ..serializadores.miembro_serializer import (
+from ..serializers.miembro_serializer import (
     UsuarioSerializer, RegistroUsuarioSerializer,
     MiembroSerializer, MiembroCrearSerializer
 )

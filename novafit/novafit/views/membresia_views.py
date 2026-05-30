@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from ..models.membresia import Plan, Membresia
-from ..serializadores.membresia_serializer import PlanSerializer, MembresiaSerializer
+from ..serializers.membresia_serializer import PlanSerializer, MembresiaSerializer
 
 
 class PlanViewSet(viewsets.ModelViewSet):

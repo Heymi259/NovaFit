@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from ..models.asistencia import Asistencia
-from ..serializadores.asistencia_serializer import AsistenciaSerializer
+from ..serializers.asistencia_serializer import AsistenciaSerializer
 
 
 class AsistenciaViewSet(viewsets.ModelViewSet):

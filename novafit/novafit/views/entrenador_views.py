@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from ..models.entrenador import Entrenador
-from ..serializadores.entrenador_serializer import EntrenadorSerializer, EntrenadorResumenSerializer
+from ..serializers.entrenador_serializer import EntrenadorSerializer, EntrenadorResumenSerializer
 
 
 class EntrenadorViewSet(viewsets.ModelViewSet):
@@ -23,7 +23,7 @@ class EntrenadorViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'], url_path='clases')
     def clases(self, request, pk=None):
-        from ..serializadores.clase_serializer import ClaseSerializer
+        from ..serializers.clase_serializer import ClaseSerializer
         entrenador = self.get_object()
         clases = entrenador.clases.filter(activa=True)
         serializer = ClaseSerializer(clases, many=True)

@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from ..models.clase import Clase, Inscripcion
-from ..serializadores.clase_serializer import ClaseSerializer, InscripcionSerializer
+from ..serializers.clase_serializer import ClaseSerializer, InscripcionSerializer
 
 
 class ClaseViewSet(viewsets.ModelViewSet):
@@ -26,7 +26,7 @@ class ClaseViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'], url_path='inscritos')
     def inscritos(self, request, pk=None):
-        from ..serializadores.miembro_serializer import MiembroSerializer
+        from ..serializers.miembro_serializer import MiembroSerializer
         clase = self.get_object()
         inscritos = clase.inscripciones.filter(estado='activa').select_related('miembro__usuario')
         miembros = [i.miembro for i in inscritos]
