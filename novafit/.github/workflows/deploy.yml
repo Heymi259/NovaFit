@@ -44,6 +44,7 @@ jobs:
       - name: Run tests
         working-directory: novafit
         env:
+          DJANGO_SETTINGS_MODULE: config.settings
           SECRET_KEY:             test-secret-key-for-ci-only
           DEBUG:                  True
           ALLOWED_HOSTS:          localhost,127.0.0.1
