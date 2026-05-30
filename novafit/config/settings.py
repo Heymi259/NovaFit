@@ -11,7 +11,13 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-this-in-production'
 
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "20.163.58.243",
+    "delacruz-gym.uaeftt-ute.site",
+]
+ 
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [
