@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
-from ..modelos.asistencia import Asistencia
+from ..models.asistencia import Asistencia
 from ..serializadores.asistencia_serializer import AsistenciaSerializer
 
 

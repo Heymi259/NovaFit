@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..modelos.clase import Clase, Inscripcion
+from ..models.clase import Clase, Inscripcion
 from .entrenador_serializer import EntrenadorResumenSerializer
 
 
@@ -30,7 +30,7 @@ class ClaseSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from ..modelos.entrenador import Entrenador
+        from ..models.entrenador import Entrenador
         self.fields['entrenador_id'].queryset = Entrenador.objects.filter(activo=True)
 
 

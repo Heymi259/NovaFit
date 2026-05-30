@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..modelos.pago import Pago
+from ..models.pago import Pago
 
 
 class PagoSerializer(serializers.ModelSerializer):

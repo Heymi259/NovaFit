@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from ..modelos.clase import Clase, Inscripcion
+from ..models.clase import Clase, Inscripcion
 from ..serializadores.clase_serializer import ClaseSerializer, InscripcionSerializer
 
 

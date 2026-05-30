@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from ..modelos.membresia import Plan, Membresia
+from ..models.membresia import Plan, Membresia
 from ..serializadores.membresia_serializer import PlanSerializer, MembresiaSerializer
 
 

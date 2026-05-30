@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..modelos.entrenador import Entrenador
+from ..models.entrenador import Entrenador
 from .miembro_serializer import UsuarioSerializer
 
 

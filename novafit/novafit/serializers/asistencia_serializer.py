@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..modelos.asistencia import Asistencia
+from ..models.asistencia import Asistencia
 
 
 class AsistenciaSerializer(serializers.ModelSerializer):

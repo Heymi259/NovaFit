@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..modelos.membresia import Plan, Membresia
+from ..models.membresia import Plan, Membresia
 
 
 class PlanSerializer(serializers.ModelSerializer):
