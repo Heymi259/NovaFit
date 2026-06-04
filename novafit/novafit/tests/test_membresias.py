@@ -7,9 +7,9 @@ from ..models.miembro import Usuario, Miembro
 from ..models.membresia import Plan, Membresia
 
 
-class PlanTestCase(TestCase):
+class PruebaPlanes(TestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.cliente = APIClient()
         self.admin = Usuario.objects.create_user(
             username='admin', password='admin1234', rol='admin'
         )
@@ -20,41 +20,41 @@ class PlanTestCase(TestCase):
             frecuencia='mensual'
         )
         url_login = reverse('token_obtain_pair')
-        response = self.client.post(url_login, {'username': 'admin', 'password': 'admin1234'})
-        self.token = response.data['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        respuesta = self.cliente.post(url_login, {'username': 'admin', 'password': 'admin1234'})
+        self.token = respuesta.data['access']
+        self.cliente.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
     def test_listar_planes(self):
         url = reverse('plan-list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.get(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
 
     def test_crear_plan(self):
         url = reverse('plan-list')
-        data = {
+        datos = {
             'nombre': 'Plan Premium',
             'precio': 60.00,
             'duracion_dias': 30,
             'frecuencia': 'mensual'
         }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        respuesta = self.cliente.post(url, datos)
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
 
     def test_precio_invalido(self):
         url = reverse('plan-list')
-        data = {
+        datos = {
             'nombre': 'Plan Inválido',
             'precio': -10,
             'duracion_dias': 30,
             'frecuencia': 'mensual'
         }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        respuesta = self.cliente.post(url, datos)
+        self.assertEqual(respuesta.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-class MembresiaTestCase(TestCase):
+class PruebaMembresias(TestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.cliente = APIClient()
         self.admin = Usuario.objects.create_user(
             username='admin', password='admin1234', rol='admin'
         )
@@ -69,18 +69,18 @@ class MembresiaTestCase(TestCase):
             usuario=self.usuario_miembro, cedula='1234567890'
         )
         url_login = reverse('token_obtain_pair')
-        response = self.client.post(url_login, {'username': 'admin', 'password': 'admin1234'})
-        self.token = response.data['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        respuesta = self.cliente.post(url_login, {'username': 'admin', 'password': 'admin1234'})
+        self.token = respuesta.data['access']
+        self.cliente.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
     def test_crear_membresia(self):
         url = reverse('membresia-list')
-        data = {
+        datos = {
             'miembro': self.miembro.id,
             'plan_id': self.plan.id,
             'fecha_inicio': date.today(),
             'fecha_fin': date.today() + timedelta(days=30),
             'estado': 'activa'
         }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        respuesta = self.cliente.post(url, datos)
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)

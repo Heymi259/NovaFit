@@ -6,9 +6,9 @@ from ..models.miembro import Usuario, Miembro
 from ..models.asistencia import Asistencia
 
 
-class AsistenciaTestCase(TestCase):
+class PruebaAsistencias(TestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.cliente = APIClient()
         self.admin = Usuario.objects.create_user(
             username='admin', password='admin1234', rol='admin'
         )
@@ -19,25 +19,25 @@ class AsistenciaTestCase(TestCase):
             usuario=self.usuario_miembro, cedula='1234567890'
         )
         url_login = reverse('token_obtain_pair')
-        response = self.client.post(url_login, {'username': 'admin', 'password': 'admin1234'})
-        self.token = response.data['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        respuesta = self.cliente.post(url_login, {'username': 'admin', 'password': 'admin1234'})
+        self.token = respuesta.data['access']
+        self.cliente.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
     def test_registrar_entrada(self):
         url = reverse('asistencia-registrar-entrada')
-        data = {'miembro_id': self.miembro.id}
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        datos = {'miembro_id': self.miembro.id}
+        respuesta = self.cliente.post(url, datos)
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
 
     def test_registrar_salida(self):
         asistencia = Asistencia.objects.create(miembro=self.miembro)
         url = reverse('asistencia-registrar-salida', args=[asistencia.id])
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.post(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
         asistencia.refresh_from_db()
         self.assertIsNotNone(asistencia.fecha_hora_salida)
 
     def test_asistencias_hoy(self):
         url = reverse('asistencia-hoy')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.get(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)

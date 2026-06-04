@@ -11,21 +11,21 @@ def crear_usuario_y_token(username='testuser', password='test1234', rol='admin')
         password=password,
         rol=rol
     )
-    client = APIClient()
-    response = client.post(reverse('token_obtain_pair'), {
+    cliente = APIClient()
+    respuesta = cliente.post(reverse('token_obtain_pair'), {
         'username': username,
         'password': password
     })
-    token = response.data['access']
-    client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-    return client, usuario
+    token = respuesta.data['access']
+    cliente.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+    return cliente, usuario
 
 
-def obtener_token(client, username, password):
+def obtener_token(cliente, username, password):
     """Obtiene el token JWT para un usuario existente."""
     from django.urls import reverse
-    response = client.post(reverse('token_obtain_pair'), {
+    respuesta = cliente.post(reverse('token_obtain_pair'), {
         'username': username,
         'password': password
     })
-    return response.data.get('access')
+    return respuesta.data.get('access')

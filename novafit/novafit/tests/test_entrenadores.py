@@ -6,9 +6,9 @@ from ..models.miembro import Usuario
 from ..models.entrenador import Entrenador
 
 
-class EntrenadorTestCase(TestCase):
+class PruebaEntrenadores(TestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.cliente = APIClient()
         self.admin = Usuario.objects.create_user(
             username='admin', password='admin1234', rol='admin'
         )
@@ -22,23 +22,23 @@ class EntrenadorTestCase(TestCase):
             biografia='Entrenador certificado con 5 años de experiencia.'
         )
         url_login = reverse('token_obtain_pair')
-        response = self.client.post(url_login, {'username': 'admin', 'password': 'admin1234'})
-        self.token = response.data['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        respuesta = self.cliente.post(url_login, {'username': 'admin', 'password': 'admin1234'})
+        self.token = respuesta.data['access']
+        self.cliente.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
     def test_listar_entrenadores(self):
         url = reverse('entrenador-list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.get(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
 
     def test_detalle_entrenador(self):
         url = reverse('entrenador-detail', args=[self.entrenador.id])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.get(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
 
     def test_desactivar_entrenador(self):
         url = reverse('entrenador-desactivar', args=[self.entrenador.id])
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.post(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
         self.entrenador.refresh_from_db()
         self.assertFalse(self.entrenador.activo)

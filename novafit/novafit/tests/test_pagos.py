@@ -8,9 +8,9 @@ from ..models.membresia import Plan, Membresia
 from ..models.pago import Pago
 
 
-class PagoTestCase(TestCase):
+class PruebaPagos(TestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.cliente = APIClient()
         self.admin = Usuario.objects.create_user(
             username='admin', password='admin1234', rol='admin'
         )
@@ -31,20 +31,20 @@ class PagoTestCase(TestCase):
             estado='activa'
         )
         url_login = reverse('token_obtain_pair')
-        response = self.client.post(url_login, {'username': 'admin', 'password': 'admin1234'})
-        self.token = response.data['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        respuesta = self.cliente.post(url_login, {'username': 'admin', 'password': 'admin1234'})
+        self.token = respuesta.data['access']
+        self.cliente.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
     def test_crear_pago(self):
         url = reverse('pago-list')
-        data = {
+        datos = {
             'membresia': self.membresia.id,
             'monto': 30.00,
             'metodo_pago': 'efectivo',
             'estado': 'pendiente'
         }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        respuesta = self.cliente.post(url, datos)
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
 
     def test_completar_pago(self):
         pago = Pago.objects.create(
@@ -52,17 +52,17 @@ class PagoTestCase(TestCase):
             metodo_pago='efectivo', estado='pendiente'
         )
         url = reverse('pago-completar', args=[pago.id])
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.post(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
         pago.refresh_from_db()
         self.assertEqual(pago.estado, 'completado')
 
     def test_monto_invalido(self):
         url = reverse('pago-list')
-        data = {
+        datos = {
             'membresia': self.membresia.id,
             'monto': -5,
             'metodo_pago': 'efectivo'
         }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        respuesta = self.cliente.post(url, datos)
+        self.assertEqual(respuesta.status_code, status.HTTP_400_BAD_REQUEST)

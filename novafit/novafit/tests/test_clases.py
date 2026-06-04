@@ -2,14 +2,14 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from ..models.miembro import Usuario, Miembro
+from ..models.miembro import Usuario
 from ..models.entrenador import Entrenador
-from ..models.clase import Clase, Inscripcion
+from ..models.clase import Clase
 
 
-class ClaseTestCase(TestCase):
+class PruebaClases(TestCase):
     def setUp(self):
-        self.client = APIClient()
+        self.cliente = APIClient()
         self.admin = Usuario.objects.create_user(
             username='admin', password='admin1234', rol='admin'
         )
@@ -28,18 +28,18 @@ class ClaseTestCase(TestCase):
             capacidad_maxima=15
         )
         url_login = reverse('token_obtain_pair')
-        response = self.client.post(url_login, {'username': 'admin', 'password': 'admin1234'})
-        self.token = response.data['access']
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+        respuesta = self.cliente.post(url_login, {'username': 'admin', 'password': 'admin1234'})
+        self.token = respuesta.data['access']
+        self.cliente.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
 
     def test_listar_clases(self):
         url = reverse('clase-list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.get(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
 
     def test_crear_clase(self):
         url = reverse('clase-list')
-        data = {
+        datos = {
             'nombre': 'Pilates',
             'entrenador_id': self.entrenador.id,
             'dia': 'martes',
@@ -47,10 +47,10 @@ class ClaseTestCase(TestCase):
             'hora_fin': '10:00',
             'capacidad_maxima': 10
         }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        respuesta = self.cliente.post(url, datos)
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
 
     def test_inscritos_clase(self):
         url = reverse('clase-inscritos', args=[self.clase.id])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        respuesta = self.cliente.get(url)
+        self.assertEqual(respuesta.status_code, status.HTTP_200_OK)
